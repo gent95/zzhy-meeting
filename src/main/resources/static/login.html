@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="css/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/meeting.css">
+    <script type="text/javascript" src="js/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="js/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/plugins/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="js/meeting.js"></script>
+</head>
+<body>
+<div class="easyui-panel" title="登录" style="width:100%;max-width:400px;padding:30px 60px;">
+    <form id="ff" method="post" action="http://www.meeting.com:8080/users/loginPost">
+        <div id="msg" style="width: 100%; height: 20px; margin-bottom: 5px; border: solid red 2px; display: none"></div>
+        <div style="margin-bottom:20px">
+            <input id="username" class="easyui-textbox" name="user_name" style="width:100%" data-options="label:'用户名:',required:true">
+        </div>
+        <div style="margin-bottom:20px">
+            <input id="password" class="easyui-textbox" name="user_pasd" style="width:100%" data-options="label:'密码:',required:true">
+        </div>
+    </form>
+    <div style="text-align:center;padding:5px 0">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">登录</a>
+    </div>
+</div>
+</body>
+<script type="application/javascript">
+    function submitForm(){
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            url:home_url+"/login/loginPost",
+            dataType: "JSON",
+            data: JSON.stringify({userName: $("#username").val(), userPasd: $("#password").val()}),
+            success: function (result) {
+                if (result.code == 0) {
+                    $("#msg").show();
+                    $("#msg").html("登录成功！！");
+                    window.location.href=home_url+"/static/index.html";
+                }else {
+                    $("#msg").show();
+                    $("#msg").html("账号或密码错误！！")
+                }
+            }
+        });
+    }
+</script>
+</html>

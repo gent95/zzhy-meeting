@@ -1,0 +1,17 @@
+spring:
+#配置数据源
+  datasource:
+    url: jdbc:sqlserver://localhost;databaseName=zzhy_metting
+    username: sa
+    password: 123456
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    show-sql: true
+    jpa:
+      properties.hibernate.dialect: org.hibernate.dialect.SQLServer2012Dialect
+      hibernate.ddl-auto: none
+  http.encoding.charset:  utf8
+#配置静态资源
+  mvc:
+   static-path-pattern: /static/**
+
