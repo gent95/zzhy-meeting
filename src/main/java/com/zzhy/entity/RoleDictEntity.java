@@ -14,6 +14,15 @@ public class RoleDictEntity implements Serializable {
     @Id
     private Integer roleid;
     private String rolename;
+    private int is_all_dist;
+
+    public int getIs_all_dist() {
+        return is_all_dist;
+    }
+
+    public void setIs_all_dist(int is_all_dist) {
+        this.is_all_dist = is_all_dist;
+    }
 
     public Integer getRoleid() {
         return roleid;

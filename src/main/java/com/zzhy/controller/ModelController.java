@@ -1,7 +1,9 @@
 package com.zzhy.controller;
 
 import com.zzhy.common.util.R;
+import com.zzhy.common.util.UserUtil;
 import com.zzhy.entity.ModelEntity;
+import com.zzhy.entity.UsersEntity;
 import com.zzhy.service.LableDataService;
 import com.zzhy.service.ModelService;
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 /**
  * 模板控制器类
@@ -59,8 +62,11 @@ public class ModelController {
     }
 
     @RequestMapping("/names")
-    public R names() {
-        List<String> names = modelService.findNames();
+    public R names(HttpServletRequest request) {
+        String username = UserUtil.getUser(request);
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setUserName(username);
+        List<String> names = modelService.findNames(usersEntity);
         if (names != null) {
             return R.ok().put("data", names);
         }

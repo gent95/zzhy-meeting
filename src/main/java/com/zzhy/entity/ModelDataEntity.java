@@ -2,7 +2,6 @@ package com.zzhy.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 /**
  * 模板数据实体类
  * Created by majt on 2018-06-20.
@@ -17,6 +16,15 @@ public class ModelDataEntity implements Serializable {
     private String modHtml;
     private String createTime;
     private String dataJson;
+    private String deptName;
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
 
     public String getDataJson() {
         return dataJson;
@@ -56,6 +64,21 @@ public class ModelDataEntity implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public static class ModelDataCasEntity extends ModelDataEntity{
+        private String mdType;
+
+        public String getMdType() {
+            return mdType;
+        }
+
+        public void setMdType(String mdType) {
+            this.mdType = mdType;
+        }
+
+        public ModelDataCasEntity() {
+        }
     }
 
 }

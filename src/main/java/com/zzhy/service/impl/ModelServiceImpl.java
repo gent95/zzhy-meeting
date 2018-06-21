@@ -1,9 +1,13 @@
 package com.zzhy.service.impl;
 
 import com.zzhy.common.util.DateUtils;
+import com.zzhy.common.util.UserUtil;
 import com.zzhy.dao.ModelDao;
 import com.zzhy.entity.ModelEntity;
+import com.zzhy.entity.RoleDictEntity;
+import com.zzhy.entity.UsersEntity;
 import com.zzhy.service.ModelService;
+import com.zzhy.service.RoleDictService;
 import com.zzhy.service.RoomService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,9 @@ public class ModelServiceImpl implements ModelService {
     private ModelDao modelDao;
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoleDictService roleDictService;
 
     @Override
     public List<ModelEntity> findAll() {
@@ -41,16 +48,21 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<String> findNames() {
-        List<ModelEntity> list = modelDao.findAll();
+    public List<String> findAllNames() {
+        List<ModelEntity> list = findAll();
+        return getModelNames(list);
+    }
+
+    private List<String> getModelNames(List<ModelEntity> list){
         List<String> names = new ArrayList<>();
         if (list != null || list.size() != 0) {
             for (ModelEntity modelEntity : list) {
                 names.add(modelEntity.getModelName());
             }
-            return names;
+        }else {
+            return null;
         }
-        return null;
+        return names;
     }
 
     @Override
@@ -60,7 +72,6 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public List<ModelEntity.ModelEntityCasc> search(ModelEntity modelEntity) {
-        List<ModelEntity> list = null;
         if (StringUtils.isNotBlank(modelEntity.getCreateTime())){
             if (modelEntity.getModelRoom() == 0 && StringUtils.isBlank(modelEntity.getModelName())){
                 return findByCreateTimeBetween(modelEntity);
@@ -128,6 +139,21 @@ public class ModelServiceImpl implements ModelService {
     @Override
     public List<ModelEntity.ModelEntityCasc> findByModelNameAndModelRoom(ModelEntity modelEntity) {
         return util(modelDao.findByModelNameAndModelRoom(modelEntity.getModelName(), modelEntity.getModelRoom()));
+    }
+
+    @Override
+    public List<String> findAllSingleRoomModelNames() {
+        return getModelNames(modelDao.findByModelRoom(1L));
+    }
+
+    @Override
+    public List<String> findNames(UsersEntity usersEntity) {
+        RoleDictEntity roleDictEntity = roleDictService.findByUserName(usersEntity);
+        if (roleDictEntity.getIs_all_dist() == 1){
+            return findAllNames();
+        }else{
+            return findAllSingleRoomModelNames();
+        }
     }
 
     private List<ModelEntity.ModelEntityCasc> util(List<ModelEntity> modelEntities) {

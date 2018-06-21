@@ -13,12 +13,17 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UsersEntity login(UsersEntity usersEntity) {
-        UsersEntity tmp = usersDao.findByUserName(usersEntity.getUserName());
+        UsersEntity tmp = findByUserName(usersEntity);
         if (tmp != null){
             if (tmp.getUserPasd().equals(usersEntity.getUserPasd())) {
                 return tmp;
             }
         }
         return null;
+    }
+
+    @Override
+    public UsersEntity findByUserName(UsersEntity usersEntity) {
+        return usersDao.findByUserName(usersEntity.getUserName());
     }
 }

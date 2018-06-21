@@ -43,5 +43,10 @@ public class ModelDataController {
         modelDataService.deleteById(modelDataEntity.getModId());
         return R.ok() ;
     }
+
+    @RequestMapping("/search")
+    public R search(ModelDataEntity.ModelDataCasEntity mmc){
+        return R.ok().put("total",modelDataService.search(mmc).size()).put("rows",modelDataService.search(mmc));
+    }
 }
 

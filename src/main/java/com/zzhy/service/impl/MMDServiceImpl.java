@@ -18,24 +18,31 @@ public class MMDServiceImpl implements MMDService {
     @Autowired
     private ModelService modelService;
     @Autowired
-    private ModelDataService modelDataService;
-
-    @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private ModelDataService modelDataService;
+
     @Override
-    public List<MMDEntity> findAll() {
-        List<ModelDataEntity> modelDs = modelDataService.findAll();
+    public List<MMDEntity> cast(List<ModelDataEntity> mdes) {
         List<MMDEntity> list = new ArrayList<>();
-        for (ModelDataEntity modelDataEntity : modelDs) {
+        for (ModelDataEntity modelDataEntity : mdes) {
             MMDEntity mmdEntity = new MMDEntity();
             ModelEntity modelEntity = modelService.findById(modelDataEntity.getModType());
             mmdEntity.setModId(modelDataEntity.getModId());
             mmdEntity.setModelName(modelEntity.getModelName());
             mmdEntity.setRoomName(roomService.findById(modelEntity.getModelRoom()).getRoomName());
-            mmdEntity.setCreateTime(modelDataEntity.getCreateTime());
+            mmdEntity.setCreateTime(modelDataEntity.getCreateTime().split(" ")[0]);
+            mmdEntity.setDeptName(modelDataEntity.getDeptName());
             list.add(mmdEntity);
         }
         return list;
     }
+
+    @Override
+    public List<MMDEntity> findAll() {
+        List<ModelDataEntity> modelDs = modelDataService.findAll();
+        return cast(modelDs);
+    }
+
 }

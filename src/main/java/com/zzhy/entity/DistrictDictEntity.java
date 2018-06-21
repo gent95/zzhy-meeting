@@ -17,6 +17,15 @@ public class DistrictDictEntity implements Serializable {
     private String data_code;
     private String data_name;
     private Integer py;
+    private String exteriorcode;
+    private String hisliscode;
+    private String depclass;
+    private String depcss;
+    private String displayname;
+    private String mingkecode;
+    private String mingkecode1;
+    private String mingke;
+    private String lqt;
 
     public String getDatano() {
         return datano;
@@ -121,14 +130,4 @@ public class DistrictDictEntity implements Serializable {
     public void setLqt(String lqt) {
         this.lqt = lqt;
     }
-
-    private String exteriorcode;
-    private String hisliscode;
-    private String depclass;
-    private String depcss;
-    private String displayname;
-    private String mingkecode;
-    private String mingkecode1;
-    private String mingke;
-    private String lqt;
 }
