@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
 /**
  * 模板控制器类
  * Created by majt on 2018-06-20.
@@ -35,10 +36,10 @@ public class ModelController {
 
     @RequestMapping("/save")
     public R save(@RequestBody ModelEntity modelEntity) {
-        if (modelEntity.getModelRoom() == null){
+        if (modelEntity.getModelRoom() == null) {
             modelEntity.setModelRoom(1L);
         }
-        if (StringUtils.isBlank(modelEntity.getModelName())){
+        if (StringUtils.isBlank(modelEntity.getModelName())) {
             modelEntity.setModelName("未命名");
         }
         modelService.save(modelEntity);
@@ -63,14 +64,7 @@ public class ModelController {
 
     @RequestMapping("/names")
     public R names(HttpServletRequest request) {
-        String username = UserUtil.getUser(request);
-        UsersEntity usersEntity = new UsersEntity();
-        usersEntity.setUserName(username);
-        List<String> names = modelService.findNames(usersEntity);
-        if (names != null) {
-            return R.ok().put("data", names);
-        }
-        return R.error();
+        return R.ok().put("data", modelService.findNames());
     }
 
     @RequestMapping("/search")
@@ -91,12 +85,21 @@ public class ModelController {
     }
 
     @RequestMapping("/lablesDatas")
-    public R lablesDatas(ModelEntity modelEntity){
-        return R.ok().put("lableDatas",lableDataService.findOneModelLaDas(modelEntity));
+    public R lablesDatas(ModelEntity modelEntity) {
+        return R.ok().put("lableDatas", lableDataService.findOneModelLaDas(modelEntity));
     }
 
     @RequestMapping("/modelName")
-    public R modelName(ModelEntity modelEntity){
-        return R.ok().put("data",modelService.findByModelName(modelEntity));
+    public R modelName(ModelEntity modelEntity) {
+        return R.ok().put("data", modelService.findByModelName(modelEntity));
     }
+
+    @RequestMapping("/checkRoom")
+    public R checkRoom(ModelEntity modelEntity){
+        if (StringUtils.isBlank(modelEntity.getModelId().toString())){
+            return R.error();
+        }
+        return R.ok().put("data",modelService.findByModelId(modelEntity));
+    }
+
 }

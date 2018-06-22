@@ -10,4 +10,5 @@ public interface DoctorDictService{
 
     //获取用户所在的科室名称
     List<String> getDeptNames(DoctorDictEntity doctorDictEntity);
+    
 }

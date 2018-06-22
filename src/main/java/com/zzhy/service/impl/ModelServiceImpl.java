@@ -48,9 +48,8 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<String> findAllNames() {
-        List<ModelEntity> list = findAll();
-        return getModelNames(list);
+    public List<ModelEntity> findAllNames() {
+        return findAll();
     }
 
     private List<String> getModelNames(List<ModelEntity> list){
@@ -147,13 +146,13 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public List<String> findNames(UsersEntity usersEntity) {
-        RoleDictEntity roleDictEntity = roleDictService.findByUserName(usersEntity);
-        if (roleDictEntity.getIs_all_dist() == 1){
+    public List<ModelEntity> findNames() {
             return findAllNames();
-        }else{
-            return findAllSingleRoomModelNames();
-        }
+    }
+
+    @Override
+    public ModelEntity findByModelId(ModelEntity modelEntity) {
+        return modelDao.findOne(modelEntity.getModelId());
     }
 
     private List<ModelEntity.ModelEntityCasc> util(List<ModelEntity> modelEntities) {

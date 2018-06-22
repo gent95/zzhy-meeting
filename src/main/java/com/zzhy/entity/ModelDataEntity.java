@@ -17,6 +17,15 @@ public class ModelDataEntity implements Serializable {
     private String createTime;
     private String dataJson;
     private String deptName;
+    private int createUser;
+
+    public int getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(int createUser) {
+        this.createUser = createUser;
+    }
 
     public String getDeptName() {
         return deptName;
@@ -68,6 +77,15 @@ public class ModelDataEntity implements Serializable {
 
     public static class ModelDataCasEntity extends ModelDataEntity{
         private String mdType;
+        private String endDate; //用于接受查询时候的虚拟结束时间
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
 
         public String getMdType() {
             return mdType;

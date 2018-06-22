@@ -12,10 +12,15 @@
     <script type="text/javascript" src="js/meeting.js"></script>
 </head>
 <body>
-<div class="easyui-layout" style="width:80%;height:600px; margin: 0px auto 0px auto; text-align: center;">
+<div class="easyui-layout" style="width:80%;height:600px; padding-left: 20px; margin: 0px auto 0px auto; text-align: center;">
     <div data-options="region:'north'" style="height:50px; width: 100px; margin: 0px auto 0px auto; text-align: center">
-        <select id="selModeName" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="模板名称:" style="width:200px; height: 30px; margin-left: 50px;"></select>
-        <select id="selDistrict" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="科室名称:" style="width:400px; height: 30px; margin-left: 50px;"></select>
+        <div id="selModeNamediv" style="float: left;">
+            <select id="selModeName" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="模板名称:" style="width:200px; height: 30px; margin-left: 50px;"></select>
+        </div>
+        <div id="selDistrictdiv" style="float: left">
+            <select id="selDistrict" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="科室名称:" style="width:400px; height: 30px; margin-left: 50px;"></select>
+        </div>
+        <a id="search" onclick="showFile()" data-options="iconCls:'icon-ok'" class="easyui-linkbutton" plain="true" outline="true" style="width:80px;height:30px;"><span>添加</span></a>
     </div>
     <div id="center" data-options="region:'center',title:'表单页',iconCls:'icon-ok'" style="padding: 0px;"></div>
 </div>

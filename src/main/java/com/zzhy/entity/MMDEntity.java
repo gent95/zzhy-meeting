@@ -9,6 +9,15 @@ public class MMDEntity implements Serializable {
     private Long modId;
     private String roomName;
     private String modelName;
+    private String createUser;
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
     public String getDeptName() {
         return deptName;

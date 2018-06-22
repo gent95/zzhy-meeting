@@ -75,6 +75,13 @@ public class ModelEntity implements Serializable {
         this.modelName = modelName;
     }
 
+    public ModelEntity() {
+    }
+    public ModelEntity(Long modelId,String modelName) {
+        this.modelId = modelId;
+        this.modelName = modelName;
+    }
+
     public class ModelEntityCasc{
         private Long modelId;
         private String modelHtml;
@@ -140,5 +147,6 @@ public class ModelEntity implements Serializable {
             this.createTime = createTime;
         }
     }
+
 
 }

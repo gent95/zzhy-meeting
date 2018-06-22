@@ -1,8 +1,12 @@
 package com.zzhy.controller;
 
 import com.zzhy.common.util.R;
+import com.zzhy.common.util.UserUtil;
 import com.zzhy.entity.ModelDataEntity;
+import com.zzhy.entity.UsersEntity;
 import com.zzhy.service.ModelDataService;
+import com.zzhy.service.UsersService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +20,11 @@ import java.util.List;
 @RestController
 @RequestMapping("modelData")
 public class ModelDataController {
-
     @Autowired
     private ModelDataService modelDataService;
+
+    @Autowired
+    private UsersService usersService;
 
     @RequestMapping("/list")
     public R getList(){
@@ -26,8 +32,11 @@ public class ModelDataController {
         return R.ok().put("total",list.size()).put("rows",list);
     }
     @RequestMapping("/save")
-    public R save(@RequestBody  ModelDataEntity modelDataEntity){
+    public R save(@RequestBody  ModelDataEntity modelDataEntity, HttpServletRequest request){
         if (modelDataEntity != null){
+            String username = UserUtil.getUser(request);
+            UsersEntity usersEntity = usersService.findByUserName(new UsersEntity(username));
+            modelDataEntity.setCreateUser(usersEntity.getId());
             return R.ok().put("data",modelDataService.save(modelDataEntity));
         }
         return  R.error();

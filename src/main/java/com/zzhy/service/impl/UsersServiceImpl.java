@@ -26,4 +26,9 @@ public class UsersServiceImpl implements UsersService {
     public UsersEntity findByUserName(UsersEntity usersEntity) {
         return usersDao.findByUserName(usersEntity.getUserName());
     }
+
+    @Override
+    public UsersEntity findById(UsersEntity usersEntity) {
+        return usersDao.findById(usersEntity.getId());
+    }
 }

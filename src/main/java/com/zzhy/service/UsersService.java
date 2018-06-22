@@ -10,4 +10,7 @@ public interface UsersService{
     //根据用户名获取用户所有信息
     UsersEntity findByUserName(UsersEntity usersEntity);
 
+    //根据id查询
+    UsersEntity findById(UsersEntity usersEntity);
+
 }

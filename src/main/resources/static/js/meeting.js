@@ -1,4 +1,4 @@
-var home_url = "http://www.meeting.com",
+var home_url = "http://www.meeting.com:8080",
     elementList = "/element/list",
     modelList = "/model/list",
     modelTypeList = "/modelType/list",
@@ -11,13 +11,15 @@ var home_url = "http://www.meeting.com",
     modelDelete = "/model/delete",
     modelNames = "/model/names",
     modelSearch = "/model/search",
+    modelCheckRoom = "/model/checkRoom",
     modelHtmlCode = "/model/code",
     modelModelName = "/model/modelName",
     modelLablesDatas = "/model/lablesDatas",
     mmdList = "/mmd/list",
     modelDataInfo = "/modelData/info",
     modelDataDelete = "/modelData/delete",
-    doctorGetDeptNames = "/doctor/deptNames";
+    doctorGetDeptNames = "/doctor/deptNames",
+    districtAllDeptNames = "/district/allDeptNames";
 
 //点击模板列表按钮，打开dialog
 function clickShowModelList() {
@@ -74,7 +76,7 @@ function init_model_names() {
         result = result.data;
         var names = [{'text': '请选择', 'id': ''}];
         for (var i = 0; i < result.length; i++) {
-            names.push({"text": result[i], "id": "name" + i});
+            names.push({"text": result[i].modelName, "id": result[i].modelId});
         }
         $("#selModeName").combobox("loadData", names);
     });
@@ -248,9 +250,18 @@ function addElementToContent(data, lable) {
         case "多选按钮":
             var element_html = checkBox(data);
             break;
+        case "正标题":
+            var element_html = "<h1>正标题</h1>";
+            break;
+        case "副标题":
+            var element_html = "<h2>副标题</h2>"
+            break;
+        case "小标题":
+            var element_html = "<h3>小标题</h3>"
+            break;
         case "多行文本框":
             var element_html = "";
-            element_html = "<input type='text' class='input' data-options='multiline:true,editable:true,panelWidth:220,panelHeight:240,iconWidth:30' style='width:40%;height:70px; margin-left: 50px;'/>"
+            element_html = "<textarea type='text' class='input' style='width: 568px; height: 316px; margin-left: 50px;'/>"
             break;
         default:
             var element_html = "";
@@ -292,7 +303,8 @@ var checkBox = function init_checkBox(data) {
 
 //元素添加模块模板
 var model = function element_mode(lable, html) {
-    return tmpModel = "<div ondblclick='elementDBC(this)' class = 'din' style='width: 70%; margin-top: 5px;'><span class='lable'>" + lable + ":</span>" + html +
+    var span = "<span class='lable'>" + lable + "</span>";
+    return tmpModel = "<div ondblclick='elementDBC(this)' class = 'din' style='width: 70%; margin-top: 5px;'>"+span + html +
         "<a onclick='remove_element(this)' class='easyui-linkbutton doButton'data-options=iconCls:'icon-cancel' plain='true' outline='true' style='width:30px; margin-left: 10px;'></a></div>"
 }
 
@@ -424,6 +436,7 @@ function modeTable_remove(id) {
 
 //点击提交表单按钮
 var deptName;
+
 function insert_modelData(modeType) {
     var modelData = [{'text': []}, {'radio': []}, {'checkbox': []}, {'select': []}];
     $("#content input[type='text']").each(function () {
@@ -458,7 +471,12 @@ function insert_modelData(modeType) {
         contentType: "application/json; charset=utf-8",
         url: home_url + modelDataSave,
         dataType: "JSON",
-        data: JSON.stringify({modType: modeType, modHtml: modHtml_v, dataJson: JSON.stringify(modelData),deptName:deptName}),
+        data: JSON.stringify({
+            modType: modeType,
+            modHtml: modHtml_v,
+            dataJson: JSON.stringify(modelData),
+            deptName: deptName
+        }),
         success: function (result) {
             if (result.code == 0) {
                 alert("提交成功");
@@ -534,27 +552,41 @@ function elementDBC(target) {
 }
 
 //data页面，模板名称改变时候将模板填充为提交表单
+var modelHtml,modelId1;
 function modelNameChange() {
+    $("#selDistrictdiv").hide();
     $("#selModeName").combobox({
         onSelect: function (record) {
+            modelId1 = record.id;
             modelName = record.text;
             if (modelName != "请选择") {
                 $.ajax({
                     type: 'GET',
                     contentType: "application/json; charset=utf-8",
-                    url: home_url + modelModelName + "?modelName=" + modelName,
+                    url: home_url + modelInfo + "?modelId=" + modelId1,
                     dataType: "JSON",
                     success: function (result) {
                         if (result.code == 0) {
-                            $("#center").html(result.data[0].modelHtml);
-                            replaceButton(result.data[0].modelId);
-                            $(".din a").remove();
+                            modelHtml = result.data.modelHtml;
+                            if (result.data.modelRoom == 1){
+                                $("#selDistrictdiv").show()
+                            } else {
+                                $("#selDistrictdiv").hide();
+                            }
                         }
                     }
                 });
             }
         }
     });
+}
+
+//fill页面点击添加按钮时触发
+function showFile(){
+    $("#center").html(modelHtml);
+    replaceButton(modelId1);
+    replaceFillSign();
+    $(".din a").remove();
 }
 
 //初始化模板数据列表
@@ -567,8 +599,9 @@ function init_modelDataTable(url) {
         columns: [[
             {field: 'modId', title: '编号', width: 25},
             {field: 'modelName', title: '模板名称', width: 40},
-            {field: 'roomName', title: '模板科室', width: 25},
+            // {field: 'roomName', title: '模板科室', width: 25},
             {field: 'deptName', title: '文件科室', width: 40},
+            {field: 'createUser', title: '创建人', width: 55},
             {field: 'createTime', title: '创建时间', width: 55},
             {
                 field: 'opt', title: '打开', width: 50,
@@ -641,7 +674,7 @@ function fillData(dataJson) {
         for (var l = 0; l < data[3].select.length; l++) {
             if ($(this).val() == data[3].select[l]) {
                 console.log($(this).val());
-                $(this).attr("selected","selected");
+                $(this).attr("selected", "selected");
             }
         }
     });
@@ -662,10 +695,10 @@ function modeDataTable_remove(id) {
 }
 
 //初始化科室名称列表
-function init_selDistrict(){
-    $.getJSON(home_url + doctorGetDeptNames, function (result) {
+function init_selDistrict() {
+    $.getJSON(home_url + districtAllDeptNames, function (result) {
         console.log(result);
-        if (result.code == 0){
+        if (result.code == 0) {
             result = result.data;
             var deptNames = [{'text': '请选择', 'id': ''}];
             for (var i = 0; i < result.length; i++) {
@@ -677,38 +710,36 @@ function init_selDistrict(){
 }
 
 //改变科室名称列表时触发
-function change_selDistrict(){
+function change_selDistrict() {
     $("#selDistrict").combobox({
         onSelect: function (record) {
             deptName = record.text;
-            var el = $("#content");
-            el.html(el.html().replace(/@@/ig,record.text));
-            var myDate = new Date();
-            el.html(el.html().replace(/##/ig,myDate));
-            alert(record.text)
         }
     });
 }
 
+//替换fill页面中的科室和时间标记符
+function replaceFillSign(){
+    var el = $("#content");
+    el.html(el.html().replace(/@@/ig, deptName));
+    // var myDate = new Date();
+    // el.html(el.html().replace(/##/ig, myDate));
+}
+
 //files页查询按钮触发
-var distName,MDName;
-function modelData_search(){
+var distName;
+function modelData_search() {
     var date = $("#mdDate").datebox('getValue');
-    console.log(date+"  "+distName+"   "+MDName);
-    url = home_url+modelDataSearch+"?mdType="+MDName+"&createTime="+date+"&deptName="+distName;
+    var date1 = $("#mdDate1").datebox('getValue');
+    url = home_url + modelDataSearch + "?&createTime=" + date +"&endDate="+date1+ "&deptName=" + distName;
     init_modelDataTable(url);
 }
 
 //files科室下拉框改变时获取值
-function ch_sel(){
+function ch_sel() {
     $("#selDistrict").combobox({
         onSelect: function (record) {
-           distName =  record.text;
-        }
-    });
-    $("#selModeName").combobox({
-        onSelect: function (record) {
-           MDName =  record.text;
+            distName = record.text;
         }
     });
 }

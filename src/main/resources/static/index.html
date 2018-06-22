@@ -1,97 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>模板页</title>
-    <link rel="stylesheet" type="text/css" href="css/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="css/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="css/meeting.css">
-    <script type="text/javascript" src="js/plugins/jquery.min.js"></script>
-    <script type="text/javascript" src="js/plugins/jquery.easyui.min.js"></script>
+    <title>MEETING</title>
+    <link rel="stylesheet" href="css/button.min.css" />
     <script type="text/javascript" src="js/meeting.js"></script>
 </head>
 <body>
-<div id="layout" style="width:100%;height:600px;">
-    <!--左侧布局-->
-    <div data-options="region:'west'" style="width:300px;">
-        <div class="easyui-panel" title="模板信息"
-             style="width:100%;height: 30%; heigmax-width:4px; padding-top: 5px; padding-left: 10px;">
-            <a id="search_model" data-options="iconCls:'icon-ok'" class="easyui-linkbutton" plain="true" outline="true"
-               style="width:80%;height:30px; margin-left: 15px;"><span style="font-size:16px">模板列表</span></a><br/><br/>
-            <select id="selRoom" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="科室:"
-                    style="width:80%; height: 20px; margin-top: 20px;"></select><br/><br/>
-            <input id="selModelType" class="easyui-textbox lable" label="模板名称:"
-                   style="width:80%;height: 20px; margin-top: 100px;">
-        </div>
+<div id="workarea">
+    <div class="position">
 
-        <div class="easyui-panel" title="标签属性"
-             style="width:100%;height: 80%; heigmax-width:4px; padding-top: 5px; padding-left: 10px">
-            <div style="margin-bottom:10px">
-                <select id="selElement" class="lable" data-options="editable:true,valueField:'id', textField:'text'"
-                        class="easyui-combobox" label="元素:" style="width:80%; height: 20px;">
-                </select>
-            </div>
-            <!--文本框-->
-            <div id="panle1">
-                <input class="easyui-textbox lable" label="标签:"
-                       data-options="editable:true,panelWidth:220,panelHeight:240,iconWidth:30"
-                       style="width:80%; height: 20px;">
-            </div>
-            <!--下拉框-->
-            <div id="panle2">
-                <input class="easyui-textbox lable" label="标签:"
-                       data-options="editable:true,panelWidth:220,panelHeight:240,iconWidth:30"
-                       style="width:80%; height:20px; margin-top: 5px;"><br/><br/>
-                <input id="data" class="easyui-textbox selAble" label="可选值:"
-                       data-options="multiline:true,editable:true,panelWidth:220,panelHeight:240,iconWidth:30"
-                       prompt="用','隔开,例如:(男,女)" style="width:90%;height:70px;">
-            </div>
-            <a id="add_element" data-options="iconCls:'icon-ok'" class="easyui-linkbutton" plain="true" outline="true"
-               style="width:80px;height:20px;margin-top: 5%; margin-left: 100px;"><span style="font-size:16px">添加</span></a>
-            <div>
-                <h4>提示:</h4>
-                <h5>用两个@@符号替代科室,即:"@@"</h5>
-                <h5>用两个##符号替代时间,即:"##"</h5>
-            </div>
-
+        <!--start button, nothing above this is necessary -->
+        <div class="svg-wrapper">
+            <svg height="40" width="150">
+                <rect id="shape" height="40" width="150" />
+                <div id="text">
+                    <a href="http://www.meeting.com:8080/static/make.html"><span class="spot"></span>创建模板</a>
+                </div>
+            </svg>
         </div>
+        <!--Next button -->
+        <div class="svg-wrapper">
+            <svg height="40" width="150" >
+                <rect id="shape" height="40" width="150" />
+                <div id="text">
+                    <a href="http://www.meeting.com:8080/static/fill.html"><span class="spot"></span>使用模板</a>
+                </div>
+            </svg>
+        </div>
+        <!--Next button -->
+        <div class="svg-wrapper">
+            <svg height="40" width="150" >
+                <rect id="shape" height="40" width="150" />
+                <div id="text">
+                    <a href="http://www.meeting.com:8080/static/files.html"><span class="spot"></span>全部文件</a>
+                </div>
+            </svg>
+        </div>
+        <!--End button -->
+        <!--Next button -->
+        <div class="svg-wrapper">
+            <svg height="40" width="150" >
+                <rect id="shape" height="40" width="150" />
+                <div id="text">
+                    <a href="http://www.meeting.com:8080/static/modles.html"><span class="spot"></span>全部模板</a>
+                </div>
+            </svg>
+        </div>
+        <!--End button -->
     </div>
-    <!--左侧布局-->
-
-    <!--中部布局-->
-    <div id="center" data-options="region:'center'">
-        <div id="content" class="easyui-panel" title="內容"
-             style="width:100%;height: 100%; heigmax-width:4px; padding-left: 20px;">
-            <div id="dlg" class="easyui-dialog" closed="true" title="模板列表:" data-options="iconCls:'icon-save'"
-                 style="width:600px; left: 700px">
-                <table id="datagrid" class="easyui-datagrid" style="width:100%; height: 500px;">
-                    <thead>
-                    <tr></tr>
-                    </thead>
-                </table>
-            </div>
-            <a id="add_model" onclick="click_submit()" data-options="iconCls:'icon-ok'" class="easyui-linkbutton subBut"
-               plain="true" outline="true"
-               style="width:100px;height:20px;margin-top: 10px; margin-left: 80px;"><span
-                    style="font-size:16px">保存模板</span></a>
-        </div>
-    </div>
-    <!--中部布局-->
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        $('#layout').layout();
-        init_selElement();
-        // setHeight();
-        selected_element();
-        add_element();
-        lins_selRoom();
-        var selects = $("select");
-        for (var i = 0; i < selects.length; i++) {
-            console.log(selects[i]);
-        }
-    });
-</script>
 </body>
 </html>

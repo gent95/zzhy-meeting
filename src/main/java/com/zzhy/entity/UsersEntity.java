@@ -67,4 +67,15 @@ public class UsersEntity implements Serializable {
     public void setGrono(Integer grono) {
         this.grono = grono;
     }
+
+    public UsersEntity() {
+    }
+
+    public UsersEntity(String userName) {
+        this.userName = userName;
+    }
+
+    public UsersEntity(Integer id) {
+        this.id = id;
+    }
 }

@@ -19,13 +19,14 @@
     <div data-options="region:'north'" style="height:100px">
         <div style="padding-left: 180px; padding-top: 40px">
             <select id="selDistrict" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="科室名称:" style="width:400px; height: 30px; margin-left: 50px;"></select>
-            <select id="selModeName" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="模板名称:" style="width:200px; height: 30px; margin-left: 50px;"></select>
-            <input  id="mdDate" class="easyui-datebox" data-options="" value="" style="width:200px">
+            <!--<select id="selModeName" data-options="valueField:'id', textField:'text'" class="easyui-combobox" label="模板名称:" style="width:200px; height: 30px; margin-left: 50px;"></select>-->
+            <input  id="mdDate" label="开始日期:" class="easyui-datebox" data-options="" value="" style="width:200px">
+            <input  id="mdDate1" label="结束日期:" class="easyui-datebox" data-options="" value="" style="width:200px">
             <a id="search" onclick="modelData_search()" data-options="iconCls:'icon-ok'" class="easyui-linkbutton" plain="true" outline="true" style="width:80px;height:30px;"><span>查询</span></a>
         </div>
     </div>
-    <div data-options="region:'center',title:'数据列表',iconCls:'icon-ok'" style="padding: 0px;">
-        <table id="datagrid2" class="easyui-datagrid" style="width:100%; height: 500px;">
+    <div data-options="region:'center',title:'数据列表',iconCls:'icon-ok'" style="padding: 0px; width: auto;overflow-x:hidden;">
+        <table id="datagrid2" class="easyui-datagrid" style="width:100%; height: 500px; scrollbarSize :0;">
             <thead>
             <tr></tr>
             </thead>

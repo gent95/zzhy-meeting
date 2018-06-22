@@ -1,5 +1,6 @@
 package com.zzhy.service;
 
+import com.zzhy.entity.ModelDataEntity;
 import com.zzhy.entity.ModelEntity;
 import com.zzhy.entity.UsersEntity;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface ModelService extends BaseService<ModelEntity> {
     //获取所有模板名称
-    List<String> findAllNames();
+    List<ModelEntity> findAllNames();
 
     //获取所有模板
     List<ModelEntity.ModelEntityCasc> findList();
@@ -43,5 +44,8 @@ public interface ModelService extends BaseService<ModelEntity> {
     List<String> findAllSingleRoomModelNames();
 
     //根据用户权限获取可操作的模板的名称
-    List<String> findNames(UsersEntity usersEntity);
+    List<ModelEntity> findNames();
+
+    //根据model_id查询
+    ModelEntity findByModelId(ModelEntity modelEntity);
 }

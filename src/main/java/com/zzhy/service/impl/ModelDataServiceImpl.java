@@ -53,32 +53,17 @@ public class ModelDataServiceImpl implements ModelDataService {
 
     @Override
     public List<MMDEntity> search(ModelDataEntity.ModelDataCasEntity mmc) {
-        List<ModelDataEntity> mdList = new ArrayList<>();
         if (mmc.getDeptName().equals("请选择") || StringUtils.isBlank(mmc.getDeptName())) {
-            if (StringUtils.isBlank(mmc.getCreateTime())) {
-                if (StringUtils.isBlank(mmc.getMdType()) || mmc.getMdType().equals("请选择")) {
-                    return mmdService.cast(findAll());
-                } else {
-                    ModelEntity modelEntity = new ModelEntity();
-                    modelEntity.setModelName(mmc.getMdType());
-                    List<ModelEntity.ModelEntityCasc> list = modelService.findByModelName(modelEntity);
-                    for (ModelEntity.ModelEntityCasc mme: list) {
-                        ModelDataEntity modelDataEntity = new ModelDataEntity();
-                        modelDataEntity.setModType(mme.getModelId());
-                        for (ModelDataEntity m:findByModelType(modelDataEntity)) {
-                            mdList.add(m);
-                        }
-                    }
-                }
-            }else{
-                return mmdService.cast(findByCreateTime(mmc));
+            if (StringUtils.isBlank(mmc.getCreateTime()) || StringUtils.isBlank(mmc.getEndDate())) {
+                return mmdService.cast(findAll());
+            } else {
+                return mmdService.cast(findByBetweenCreateTime(mmc));
             }
-        }else if (StringUtils.isNotBlank(mmc.getCreateTime())){
-            return mmdService.cast(findByDeptNameAndCreateTime(mmc));
-        }else {
+        } else if (StringUtils.isNotBlank(mmc.getCreateTime())) {
+            return mmdService.cast(findByBetweenCreateTime(mmc));
+        } else {
             return mmdService.cast(findByDeptName(mmc));
         }
-        return mmdService.cast(mdList);
     }
 
     @Override
@@ -88,14 +73,18 @@ public class ModelDataServiceImpl implements ModelDataService {
 
     @Override
     public List<ModelDataEntity> findByDeptNameAndCreateTime(ModelDataEntity modelDataEntity) {
-        return modelDataDao.findByDeptNameAndCreateTimeBetween(modelDataEntity.getDeptName(),modelDataEntity.getCreateTime()+" 00:00:00",modelDataEntity.getCreateTime()+" 23:59:59");
+        return modelDataDao.findByDeptNameAndCreateTimeBetween(modelDataEntity.getDeptName(), modelDataEntity.getCreateTime() + " 00:00:00", modelDataEntity.getCreateTime() + " 23:59:59");
     }
 
     @Override
     public List<ModelDataEntity> findByCreateTime(ModelDataEntity modelDataEntity) {
-        return modelDataDao.findByCreateTimeBetween(modelDataEntity.getCreateTime()+" 00:00:00",modelDataEntity.getCreateTime()+" 23:59:59");
+        return modelDataDao.findByCreateTimeBetween(modelDataEntity.getCreateTime() + " 00:00:00", modelDataEntity.getCreateTime() + " 23:59:59");
     }
 
+    //根据时间段查询
+    private List<ModelDataEntity> findByBetweenCreateTime(ModelDataEntity.ModelDataCasEntity mmc){
+        return modelDataDao.findByCreateTimeBetween(mmc.getCreateTime() + " 00:00:00",mmc.getEndDate() + " 23:59:59");
+    }
     @Override
     public List<ModelDataEntity> findByDeptName(ModelDataEntity modelDataEntity) {
         return modelDataDao.findByDeptName(modelDataEntity.getDeptName());
