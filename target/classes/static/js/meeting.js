@@ -250,9 +250,21 @@ function addElementToContent(data, lable) {
         case "多选按钮":
             var element_html = checkBox(data);
             break;
+        case "正标题":
+            var element_html = "<h1 style='display: inline'>"+lable+"</h1>";
+            lable = "";
+            break;
+        case "副标题":
+            var element_html = "<h2 style='display: inline'>"+lable+"</h2>";
+            lable = "";
+            break;
+        case "小标题":
+            var element_html = "<h3 style='display: inline'>"+lable+"</h3>";
+            lable = "";
+            break;
         case "多行文本框":
             var element_html = "";
-            element_html = "<textarea type='text' class='input' data-options='multiline:true,editable:true,panelWidth:220,panelHeight:240,iconWidth:30' style='width:60%;height:70px; margin-left: 50px;'/>"
+            element_html = "<br/><textarea type='text' class='input' style='width: 568px; height: 316px; margin-left: 50px;'/>"
             break;
         default:
             var element_html = "";
@@ -294,7 +306,14 @@ var checkBox = function init_checkBox(data) {
 
 //元素添加模块模板
 var model = function element_mode(lable, html) {
-    return tmpModel = "<div ondblclick='elementDBC(this)' class = 'din' style='width: 70%; margin-top: 5px;'><span class='lable'>" + lable + ":</span>" + html +
+    var span = "<span class='lable'>" + lable + "</span>";
+    //根据是否包含特殊符号决定lable是否后置
+    opt= span+html;
+    if(lable.indexOf(">>") >= 0){
+        span = span.replace(">>","");
+        opt= html+span;
+    }
+    return tmpModel = "<div ondblclick='elementDBC(this)' class = 'din' style='width: 70%; margin-top: 5px;'>"+opt +
         "<a onclick='remove_element(this)' class='easyui-linkbutton doButton'data-options=iconCls:'icon-cancel' plain='true' outline='true' style='width:30px; margin-left: 10px;'></a></div>"
 }
 
@@ -428,7 +447,7 @@ function modeTable_remove(id) {
 var deptName;
 
 function insert_modelData(modeType) {
-    var modelData = [{'text': []}, {'radio': []}, {'checkbox': []}, {'select': []}];
+    var modelData = [{'text': []}, {'radio': []}, {'checkbox': []}, {'select': []},{'textarea': []}];
     $("#content input[type='text']").each(function () {
         if ($(this).val() != "") {
             modelData[0].text.push($(this).val());
@@ -451,6 +470,12 @@ function insert_modelData(modeType) {
     $("#content select option:selected").each(function () {
         if ($(this).val() != "") {
             modelData[3].select.push($(this).val());
+        }
+    });
+
+    $("textarea").each(function () {
+        if ($(this).val() != "") {
+            modelData[4].textarea.push($(this).val());
         }
     });
 
@@ -668,6 +693,11 @@ function fillData(dataJson) {
             }
         }
     });
+
+    var textareaList = $("textarea");
+    for (var i = 0; i < textareaList.length; i++) {
+        textareaList[i].value = data[4].textarea[i];
+    }
 }
 
 //点击表格删除按钮时，删除选中的模板
